@@ -12,8 +12,9 @@ import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Home from './screens/Home';
-import Login from './screens/Login';
+import ToDo from './screens/ToDo';
+import Splash from './screens/Splash';
+import Done from './screens/Done';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
@@ -22,12 +23,45 @@ import store from './src/redux/store';
 import {Provider} from 'react-redux';
 import Map from './screens/Map';
 import CameraComponent from './screens/CameraComponent';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import AddTasks from './screens/AddTasks';
 
-const Stack = createNativeStackNavigator();
-// const BottomTab = createBottomTabNavigator();
+const RootStack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 // const MaterialBottomTab = createMaterialBottomTabNavigator();
 // const MaterialTopTabs = createMaterialTopTabNavigator();
 // const DrawerNavigation = createDrawerNavigator();
+
+function HomeTab() {
+  return (
+    <Tab.Navigator
+      screenOptions={({route}) => ({
+        tabBarActiveTintColor: '#0080ff',
+        tabBarInActiveTintColor: '#777777',
+        tabBarLabelStyle: {fontSize: 15, fontWeight: 'bold'},
+        headerShown: false,
+        tabBarIcon: ({focused, size, color}) => {
+          let iconName;
+          if (route.name === 'To-do') {
+            iconName = 'clipboard-list';
+            size = focused ? 25 : 20;
+          } else if (route.name === 'Done') {
+            iconName = 'clipboard-check';
+            size = focused ? 25 : 20;
+          }
+          return (
+            <FontAwesome5
+              name={iconName}
+              size={size}
+              color={color}></FontAwesome5>
+          );
+        },
+      })}>
+      <Tab.Screen name="To-do" component={ToDo}></Tab.Screen>
+      <Tab.Screen name="Done" component={Done}></Tab.Screen>
+    </Tab.Navigator>
+  );
+}
 
 const App = () => {
   return (
@@ -35,12 +69,12 @@ const App = () => {
       <NavigationContainer>
         {/* STACK NAVIGATION */}
 
-        <Stack.Navigator
-          initialRouteName="Login"
+        <RootStack.Navigator
+          initialRouteName="Splash"
           screenOptions={{
             headerTitleAlign: 'center',
             headerStyle: {
-              backgroundColor: 'pink',
+              backgroundColor: '#0080ff',
             },
             headerTintColor: '#ffffff',
             headerTitleStyle: {
@@ -48,15 +82,16 @@ const App = () => {
               fontWeight: 'bold',
             },
           }}>
-          <Stack.Screen
-            name="Login"
+          <RootStack.Screen
+            name="Splash"
             options={{headerShown: false}}
-            component={Login}
+            component={Splash}
           />
-          <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen name="Map" component={Map} />
-          <Stack.Screen name="Camera" component={CameraComponent} />
-        </Stack.Navigator>
+          <RootStack.Screen name="My Tasks" component={HomeTab} />
+          <RootStack.Screen
+            name="Add-task"
+            component={AddTasks}></RootStack.Screen>
+        </RootStack.Navigator>
 
         {/* BOTTOM TAB NAVIGATION */}
 
