@@ -1,7 +1,7 @@
 import {configureStore} from '@reduxjs/toolkit';
-import userReducer from './reducers';
+import taskReducer from './reducers';
 export default configureStore({
   reducer: {
-    user: userReducer,
+    taskReducer,
   },
 });

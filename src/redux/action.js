@@ -1,39 +1,39 @@
-export const SET_USER_NAME = 'SET_USER_NAME';
-export const SET_USER_AGE = 'SET_USER_AGE';
-export const GET_POSTS = 'GET_POSTS';
+export const SET_TASKS = 'SET_TASKS';
+export const SET_TASK_ID = 'SET_TASK_ID';
+
 import axios from 'axios';
 
-export const setName = name => dispatch => {
+export const setTasks = tasks => dispatch => {
   dispatch({
-    type: SET_USER_NAME,
-    payload: name,
+    type: SET_TASKS,
+    payload: tasks,
   });
 };
 
-export const setAge = age => dispatch => {
+export const setTaskId = id => dispatch => {
   dispatch({
-    type: SET_USER_AGE,
-    payload: age,
+    type: SET_TASK_ID,
+    payload: id,
   });
 };
 
-export const getPosts = () => {
-  let response = {};
-  return async dispatch => {
-    try {
-      response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
-        method: 'GET',
-        headers: {
-          'Contnt-Type': 'application.json',
-        },
-      });
+// export const getPosts = () => {
+//   let response = {};
+//   return async dispatch => {
+//     try {
+//       response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+//         method: 'GET',
+//         headers: {
+//           'Contnt-Type': 'application.json',
+//         },
+//       });
 
-      console.log('data', response);
-    } catch (err) {
-      console.log('err signup', err);
-      throw err;
-    }
+//       console.log('data', response);
+//     } catch (err) {
+//       console.log('err signup', err);
+//       throw err;
+//     }
 
-    return response;
-  };
-};
+//     return response;
+//   };
+// };

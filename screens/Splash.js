@@ -9,7 +9,7 @@ import PushNotification from 'react-native-push-notification';
 
 const Splash = ({navigation}) => {
   const dispatch = useDispatch();
-  const {name, age} = useSelector(state => state.user);
+  // const {name, age} = useSelector(state => state.user);
 
   useEffect(() => {
     createChannel();
