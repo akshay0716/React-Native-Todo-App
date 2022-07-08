@@ -1,9 +1,10 @@
 import {StyleSheet, Text, View, TextInput, Alert} from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import CustomButton from './common/CustomButton';
 import {setTasks} from '../src/redux/action';
 import {useSelector, useDispatch} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CheckBox from '@react-native-community/checkbox';
 
 export default function AddTasks({navigation}) {
   const dispatch = useDispatch();
@@ -11,6 +12,20 @@ export default function AddTasks({navigation}) {
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    getTask();
+  }, []);
+
+  const getTask = () => {
+    let task = tasks.find(task => task.id === taskId);
+    if (task) {
+      setTitle(task.title);
+      setDescription(task.description);
+      setDone(task.done);
+    }
+  };
 
   const saveTaskHandler = () => {
     if (title.length === 0) {
@@ -21,15 +36,23 @@ export default function AddTasks({navigation}) {
           id: taskId,
           title: title,
           description: description,
+          done: done,
         };
 
-        let newTaks = [...tasks, Task];
+        let index = tasks.findIndex(task => task.id === taskId);
+        let newTasks = [];
+        if (index > -1) {
+          newTasks = [...tasks];
+          newTasks[index] = Task;
+        } else {
+          newTasks = [...tasks, Task];
+        }
 
-        AsyncStorage.setItem('Tasks', JSON.stringify(newTaks))
+        AsyncStorage.setItem('Tasks', JSON.stringify(newTasks))
           .then(task => {
-            Alert.alert('Warning', 'Task saved successfully');
-            setTasks(newTaks);
-            navigation.navigate('To-do');
+            dispatch(setTasks(newTasks));
+            Alert.alert('Success', 'Task saved successfully');
+            navigation.goBack();
           })
           .catch(err => console.log(err));
       } catch (error) {
@@ -40,7 +63,7 @@ export default function AddTasks({navigation}) {
   return (
     <View style={styles.body}>
       <TextInput
-        values={title}
+        value={title}
         style={styles.input}
         placeholder="Title"
         onChangeText={value => setTitle(value)}
@@ -51,6 +74,15 @@ export default function AddTasks({navigation}) {
         placeholder="Description"
         onChangeText={value => setDescription(value)}
       />
+      <View style={styles.checkbox}>
+        <CheckBox
+          disabled={false}
+          value={done}
+          onValueChange={newValue => setDone(newValue)}
+        />
+        <Text>Is Done</Text>
+      </View>
+
       <CustomButton
         onPress={saveTaskHandler}
         title="Save Task"
@@ -79,5 +111,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     margin: 10,
+  },
+  checkbox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
