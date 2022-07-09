@@ -51,8 +51,6 @@ export default function ToDo({navigation}) {
 
   const setTaskStatus = (id, newValue) => {
     let index = tasks.findIndex(task => task.id === id);
-    console.log('index', index);
-    console.log('newValue', newValue);
 
     if (index > -1) {
       let newTasks = [...tasks];
@@ -79,6 +77,8 @@ export default function ToDo({navigation}) {
               navigation.navigate('Add-task');
             }}>
             <View style={styles.item_row}>
+              <View
+                style={[styles.color, {backgroundColor: item.color}]}></View>
               <CheckBox
                 disabled={false}
                 value={item.done}
@@ -161,5 +161,11 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  color: {
+    width: 20,
+    height: '100%',
+    borderBottomLeftRadius: 10,
+    borderTopLeftRadius: 10,
   },
 });

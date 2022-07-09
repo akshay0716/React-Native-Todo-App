@@ -31,7 +31,7 @@ const Splash = ({navigation}) => {
         style={styles.logo}
         source={require('../assets/checklist.png')}></Image>
       {/* <Text style={styles.text}>Async Storage</Text> */}
-      <Text style={styles.text}>Mash To Do</Text>
+      <Text style={styles.text}>To Do App</Text>
     </View>
   );
 };
